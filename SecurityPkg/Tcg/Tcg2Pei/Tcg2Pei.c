@@ -279,15 +279,10 @@ SyncPcrAllocationsAndPcrMask (
   DEBUG ((DEBUG_INFO, "Tpm2GetCapabilitySupportedAndActivePcrs - TpmActivePcrBanks 0x%08x\n", TpmActivePcrBanks));
 
   Tpm2PcrMask = PcdGet32 (PcdTpm2HashMask);
-  if (Tpm2PcrMask == 0) {
-    //
-    // If PcdTpm2HashMask is zero, use ActivePcr setting.
-    // Only when PcdTpm2HashMask is initialized to 0, will it be updated to current Active Pcrs.
-    //
-    PcdSet32S (PcdTpm2HashMask, TpmActivePcrBanks);
-    Tpm2PcrMask = TpmActivePcrBanks;
-  }
 
+  // Sync the PcdTpm2HashMask to the active PCR banks.
+  PcdSet32S (PcdTpm2HashMask, TpmActivePcrBanks);
+  Tpm2PcrMask = TpmActivePcrBanks;
   DEBUG ((DEBUG_INFO, "Tpm2PcrMask 0x%08x\n", Tpm2PcrMask));
 
   //
